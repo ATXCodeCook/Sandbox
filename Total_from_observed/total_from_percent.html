@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Total Number from Percent</title>
+	<style>
+	<!-- Styles Here -->
+	*,
+	*::before,
+	*::after {
+	  box-sizing: border-box;
+	}
+	
+	input[type=number]::-webkit-inner-spin-button, 
+	input[type=number]::-webkit-outer-spin-button { 
+													-webkit-appearance: none; 
+													margin: 0; 
+	}
+	
+	output, input[type=number]	{ display : block;
+						  margin : 5px 0 20px 0;
+						  color: #006400;
+	}
+	h1 { color: #1E90FF; }
+	#TotalVisits {color: #1E90FF;
+				  font-weight : bold;
+	}
+    #margin_left { margin-left : 30px;}
+
+	#percent_text, #note, #RoundedDown {color : #1E90FF;
+				  font-weight : bold;
+	}
+	
+	</style>
+  </head>
+  <body>
+  <!-- HTML here -->
+<h1> Total Number from Percent</h1>
+
+<p> Enter the number of observations in the 1st box below and the percent (if needed) in the 2nd box.</p>
+<div id="margin_left">
+<label>Obeservations:</label>
+<input type="number" id="part_value" placeholder="enter observation number" style="width: 180px;" onkeyup="finished_typing()">
+<label>Percent represented: </label>
+<input type="number" id="percent_value" value="5" onkeyup="finished_typing()">
+<label>Total estimated observations (visitors)</label>
+<output name="TotalVisits" id="TotalVisits">0</output>
+<p>Based on a <span id="percent_text">5</span>% capture rate, there are/were approximately <span id="RoundedDown">0</span> visitors.</p>
+<p id="note">** Above value is rounded <strong>down</strong> to hundreds.</p>
+</div>
+  
+  <script>
+  // js here
+function calcTotalObservations(){
+  let partial_value = document.getElementById("part_value").value;
+  let percent_observed = document.getElementById("percent_value").value;
+  let TotalObservations = Math.round(Number(partial_value) / (Number(percent_observed / 100)));
+  document.getElementById("TotalVisits").value = TotalObservations.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  
+  let percent_num = document.getElementById("percent_text");
+  percent_num.textContent = percent_observed;
+  
+  let roundToHundreds = document.getElementById("RoundedDown");
+  roundToHundreds.textContent = (Math.floor(TotalObservations/100)*100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function finished_typing() {
+    let part_valueInput = document.getElementById("part_value");
+	let percent_valueInput = document.getElementById("percent_value");
+    let timeout = null;
+    part_valueInput.addEventListener('keyup', function (e) {
+          clearTimeout(timeout);
+          timeout = setTimeout(function () { calcTotalObservations() }, 250);
+      });
+	percent_valueInput.addEventListener('keyup', function (e) {
+          clearTimeout(timeout);
+          timeout = setTimeout(function () { calcTotalObservations() }, 250);
+      });
+};
+  
+  </script>
+  </body>
+</html>
